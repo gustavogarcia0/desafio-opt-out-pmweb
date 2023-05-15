@@ -1,0 +1,137 @@
+.card2 {
+  padding: 55px auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.coluna_esquerda .title {
+  font-size: 30px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.card2 span img {
+  margin-top: 5px;
+  margin-left: 9px;
+}
+
+.card2 .coluna_esquerda .msg_user {
+  color: rgba(71, 71, 71, 0.8);
+  font-style: normal;
+  font-size: 14px;
+  line-height: 21px;
+  max-width: 402px;
+  display: inline;
+  text-align: left;
+}
+
+.card2 .msg_user span {
+  font-weight: bold;
+}
+
+.card2 .opcional {
+  margin-top: 45px;
+}
+
+.coluna_direita {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  padding-left: 95px;
+}
+
+.coluna_direita .title {
+  color: #474747;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 19.376px;
+  line-height: 16px;
+}
+
+.card2 li {
+  margin-top: 25px;
+  list-style: none;
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.itemJustificativa label {
+  display: flex;
+  flex-direction: column;
+}
+
+.card1 label.label-justificativa {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.card2 input#justificativa {
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
+  padding: 5px 0px;
+  margin-top: 15px;
+}
+.card2 input#justificativa::placeholder {
+  margin-bottom: 7px;
+  font-size: 14px;
+  color: #474747;
+}
+
+.card2 .input_length {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: right;
+  color: #474747;
+  margin-right: 15px;
+}
+
+span .label-descadastramento-email {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  margin-top: 24px;
+}
+
+span .email-descadastrado {
+  color: blue;
+  cursor: pointer;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  margin-top: 10px;
+}
+
+.email-descadastrado:hover {
+  text-decoration: underline;
+}
+
+.submit-descadastro {
+  color: white;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  background-color: #4569ef;
+  border: 1px solid #4569ef;
+  padding: 12px 7px;
+  border-radius: 50px;
+  max-width: 112px;
+  margin-top: 21px;
+  cursor: pointer;
+}

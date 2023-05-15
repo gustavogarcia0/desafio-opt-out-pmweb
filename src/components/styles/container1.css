@@ -1,0 +1,64 @@
+.card1 h1 {
+  margin-bottom: 90px;
+}
+
+.card1 {
+  display: flex;
+  flex-direction: column;
+}
+
+.card1 label.label-justificativa {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.card1 input#justificativa {
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
+  padding: 5px 0px;
+}
+.card1 input#justificativa::placeholder {
+  margin-bottom: 7px;
+  font-size: 14px;
+  color: #474747;
+}
+
+.card1 .input_length {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: right;
+  color: #474747;
+}
+
+.card1 .label-check-box {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  margin-top: 24px;
+}
+
+.card1 input[type="checkbox"] {
+  border: 1px solid #474747;
+  color: #474747;
+}
+
+.card1 .input-submit {
+  align-self: flex-end;
+  margin-top: 83px;
+  border-radius: 50px;
+  outline: none;
+  border: 1px solid #c2c2c2;
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 13px;
+
+  padding: 9px 54px;
+}
