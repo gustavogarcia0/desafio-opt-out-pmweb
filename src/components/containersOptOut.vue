@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Container 1 -->
     <div class="container card1">
       <label for="justificativa" class="label-justificativa">Justificativa</label>
       <input
@@ -18,7 +19,9 @@
 
       <button class="input-submit" @click="submitContainer1">Salvar alterações</button>
     </div>
-    <div class="container card2" v-if="localStorageItems.length > 0">
+
+    <!-- Container 2 -->
+    <div class="container card2" v-if="showContainer2 && justificativas.length > 0">
       <div class="coluna_esquerda">
         <span class="title"
           ><p>Nós sentiremos sua falta</p>
@@ -37,22 +40,29 @@
           <p class="title">Por que você quer se descadastrar?</p>
         </span>
         <ul>
-          <li class="itemJustificativa" v-for="(item, index) in localStorageItems" :key="index">
+          <li class="itemJustificativa" v-for="(justificativa, index) in justificativas" :key="justificativa.id">
             <div>
-              <input type="radio" v-model="selectedItemIndex" :value="index" />
-              {{ item.text }}
+              <input
+                type="radio"
+                :value="index"
+                :id="'radio-' + index"
+                :checked="selectedItemIndex === index"
+                @change="selectedItemIndex = index" />
+              <label :for="'radio-' + index">{{ justificativa.text }}</label>
+              <button class="excluir-justificativa" @click="deleteJustificativa(justificativa.id, index)">Excluir</button>
             </div>
-            <input
-              id="justificativa"
-              type="text"
-              v-if="item.hasObservation && index === selectedItemIndex"
-              v-model="item.observation"
-              maxlength="150"
-              @input="updateInputLength(index)" />
-            <span class="input_length" v-if="item.hasObservation && index === selectedItemIndex">
-              <span>{{ inputLengths[index] }}</span
-              >/150 caracteres
-            </span>
+            <div class="input-text-justificativa">
+              <input
+                id="justificativa"
+                type="text"
+                v-if="justificativa.tem_observacao && selectedItemIndex === index"
+                v-model="observacoes[index]"
+                maxlength="150" />
+              <span class="input_length" v-if="justificativa.tem_observacao && selectedItemIndex === index">
+                <span>{{ observacoes[index] ? observacoes[index].length : 0 }}</span
+                >/150 caracteres
+              </span>
+            </div>
           </li>
         </ul>
 
@@ -67,6 +77,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import "./styles/container1.css";
 import "./styles/container2.css";
 import "./styles/global.css";
@@ -74,58 +85,116 @@ import "./styles/global.css";
 export default {
   data() {
     return {
-      inputText: "",
-      hasObservationCheckbox: false,
-      localStorageItems: [],
-      selectedItemIndex: -1,
-      inputLengths: [],
+      inputText: "", // Texto inserido no campo de justificativa
+      hasObservationCheckbox: false, // Indica se o usuário deseja informar uma observação
+      justificativas: [], // Lista de justificativas disponíveis
+      selectedItemIndex: -1, // Índice da justificativa selecionada
+      inputLengths: [], // Comprimento do texto inserido em cada justificativa
+      showContainer2: false, // Indica se o Container 2 deve ser exibido
+      observacoes: [], // Lista de observações informadas pelo usuário
     };
   },
   methods: {
-    submitContainer1() {
-      const text = this.inputText;
-      const item = {
-        text: text,
-        hasObservation: this.hasObservationCheckbox,
-        observation: "",
-      };
-      this.localStorageItems.push(item);
-      localStorage.setItem("items", JSON.stringify(this.localStorageItems));
+    /**
+     * Envia a justificativa do Container 1 para a API.
+     * Atualiza a lista de justificativas com a nova justificativa criada.
+     * Limpa o campo de texto e exibe o Container 2.
+     */
+    async submitContainer1() {
+      const texto = this.inputText;
+      const temObservacao = this.hasObservationCheckbox;
+      const response = await axios.post("https://node-api-dev-challenge.onrender.com/justificativas", {
+        texto: texto,
+        tem_observacao: temObservacao,
+      });
+      const justificativa = response.data;
+      justificativa.observacao = "";
+      this.justificativas.push(justificativa);
       this.inputText = "";
+      this.showContainer2 = true;
+      await this.fetchJustificativas();
     },
-    submitContainer2() {
-      console.log(this.localStorageItems);
-    },
-    loadLocalStorageItems() {
-      const items = localStorage.getItem("items");
-      if (items) {
-        this.localStorageItems = JSON.parse(items);
+
+    /**
+     * Remove uma justificativa da lista de justificativas.
+     * Verifica se o Container 2 deve ser ocultado.
+     *
+     * @param {number} id - ID da justificativa a ser excluída.
+     */
+    async deleteJustificativa(id) {
+      try {
+        await axios.delete(`https://node-api-dev-challenge.onrender.com/justificativas/${id}`);
+        const index = this.justificativas.findIndex((justificativa) => justificativa.id === id);
+        if (index !== -1) {
+          this.justificativas.splice(index, 1);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      if (this.justificativas.length === 0) {
+        this.showContainer2 = false;
       }
     },
-    loadCheckboxState() {
-      const checkboxState = localStorage.getItem("hasObservationCheckbox");
-      if (checkboxState) {
-        this.hasObservationCheckbox = JSON.parse(checkboxState);
-      }
+
+    /**
+     * Envia as justificativas do Container 2 para a API.
+     * Exibe as justificativas no console.
+     */
+    async submitContainer2() {
+      console.log(this.justificativas);
     },
-    saveCheckboxState() {
-      localStorage.setItem("hasObservationCheckbox", JSON.stringify(this.hasObservationCheckbox));
-    },
+
+    /**
+     * Atualiza o comprimento do texto inserido em uma justificativa.
+     *
+     * @param {number} index - Índice da justificativa.
+     */
     updateInputLength(index) {
-      this.inputLengths[index] = this.localStorageItems[index].observation.length;
+      this.inputLengths[index] = this.justificativas[index].observacao.length;
+    },
+
+    /**
+     * Busca as justificativas da API e atualiza a lista de justificativas.
+     */
+    async fetchJustificativas() {
+      try {
+        const response = await axios.get("https://node-api-dev-challenge.onrender.com/justificativas");
+        this.justificativas = response.data.map((justificativa) => {
+          return {
+            id: justificativa.id,
+            text: justificativa.texto,
+            tem_observacao: justificativa.tem_observacao,
+            observacao: "",
+            selected: false,
+          };
+        });
+        this.inputLengths = this.justificativas.map(() => 0);
+        if (this.justificativas.length > 0) {
+          this.showContainer2 = true;
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
+
   mounted() {
-    this.loadLocalStorageItems();
-    this.loadCheckboxState();
+    this.fetchJustificativas();
   },
+
   watch: {
+    /**
+     * Atualiza o estado selecionado das justificativas quando o selectedItemIndex é alterado.
+     *
+     * @param {number} newIndex - Novo índice da justificativa selecionada.
+     * @param {number} oldIndex - Antigo índice da justificativa selecionada.
+     */
     selectedItemIndex(newIndex, oldIndex) {
       if (oldIndex !== -1) {
-        this.localStorageItems[oldIndex].selected = false;
+        this.justificativas[oldIndex].selected = false;
       }
       if (newIndex !== -1) {
-        this.localStorageItems[newIndex].selected = true;
+        this.justificativas[newIndex].selected = true;
       }
     },
   },

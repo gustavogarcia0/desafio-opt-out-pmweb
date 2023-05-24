@@ -60,7 +60,19 @@
   flex-direction: column;
 }
 
-.itemJustificativa label {
+.card2 li div {
+  display: flex;
+}
+.card2 li input[type="radio"] {
+  margin-right: 13px;
+}
+
+.card2 li .input-text-justificativa {
+  display: flex;
+  flex-direction: column;
+}
+
+.card2 li .itemJustificativa label {
   display: flex;
   flex-direction: column;
 }
@@ -134,4 +146,22 @@ span .email-descadastrado {
   max-width: 112px;
   margin-top: 21px;
   cursor: pointer;
+}
+
+.excluir-justificativa {
+  background-color: transparent;
+  border: none;
+  color: white;
+}
+
+.excluir-justificativa:hover {
+  cursor: pointer;
+  color: white;
+  background-color: #8593c5;
+  max-width: 100px;
+  padding: 0.3em 0.5em;
+  border-radius: 100px;
+  outline: none;
+  border: none;
+  margin-left: 15px;
 }
